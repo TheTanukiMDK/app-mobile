@@ -1,12 +1,30 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-
+import { FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
+import { SafeAreaProvider,SafeAreaView } from 'react-native-safe-area-context';
+//import Cat from './components/Cat'
+import { useEffect, useState } from 'react';
 export default function App() {
+  const [data,setData] = useState([]);
+
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/posts")
+    .then((response) => response.json())
+    .then((json) => setData(json))
+    .catch((error) => console.error
+    (error
+    ));
+  }, []);
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <>
+      <SafeAreaProvider>
+        <SafeAreaView>
+          <FlatList data={data}
+          keyExtractor={item => item.id.toString()}
+          >
+          </FlatList>
+        </SafeAreaView>
+      </SafeAreaProvider>
+    </>
   );
 }
 
